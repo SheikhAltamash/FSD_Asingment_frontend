@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// --- Step 1: Get Base URL ---
 const apiUrl = import.meta.env.VITE_API_URL;
 
 console.log(
@@ -16,20 +15,16 @@ if (!apiUrl) {
 }
 console.log("[API Setup] Using API Base URL for requests:", apiUrl);
 
-// --- Step 2: Create the Axios Instance ---
 const API = axios.create({
   baseURL: apiUrl,
 });
 
-// --- Step 3: Attach the Interceptor to the Created Instance ---
 API.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
-    // console.log("[Interceptor] Running for request to:", config.url);
     if (token) {
       config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
-      // console.log("[Interceptor] Token found, Authorization header set.");
     } else {
       // console.log("[Interceptor] No token found in localStorage.");
     }
@@ -41,18 +36,15 @@ API.interceptors.request.use(
   }
 );
 
-// --- Step 4: Define and Export API Functions ---
-// ***** INCLUDE '/api' PREFIX HERE *****
-export const login = (formData) => API.post("/api/auth/login", formData); // Changed
-export const register = (formData) => API.post("/api/auth/register", formData); // Changed
 
-// Task API calls
-// ***** INCLUDE '/api' PREFIX HERE *****
-export const fetchTasks = () => API.get("/api/tasks"); // Changed
-export const createTask = (newTask) => API.post("/api/tasks", newTask); // Changed
+export const login = (formData) => API.post("/api/auth/login", formData); 
+export const register = (formData) => API.post("/api/auth/register", formData); 
+
+
+export const fetchTasks = () => API.get("/api/tasks"); 
+export const createTask = (newTask) => API.post("/api/tasks", newTask); 
 export const updateTask = (id, updatedTask) =>
-  API.put(`/api/tasks/${id}`, updatedTask); // Changed
-export const deleteTask = (id) => API.delete(`/api/tasks/${id}`); // Changed
+  API.put(`/api/tasks/${id}`, updatedTask); 
+export const deleteTask = (id) => API.delete(`/api/tasks/${id}`); 
 
-// --- Step 5: Export the configured instance ---
 export default API;
