@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const apiUrl =
-  import.meta.env.VITE_API_URL || "https://fsd-asingment-backend.onrender.com";
+// --- Step 1: Get Base URL ---
+const apiUrl = import.meta.env.VITE_API_URL;
 
 console.log(
   "[API Setup] Reading VITE_API_URL from import.meta.env:",
@@ -11,26 +11,29 @@ console.log(
 if (!apiUrl) {
   console.error(
     "CRITICAL ERROR: VITE_API_URL is not defined in your .env file. Requests will likely fail. " +
-      "Ensure .env exists in the project root with VITE_API_URL=http://<your_backend_host>:<port>/api and RESTART the Vite server."
+      "Ensure .env exists in the project root with VITE_API_URL=... and RESTART the Vite server or REBUILD/REDEPLOY the frontend."
   );
-
 }
 console.log("[API Setup] Using API Base URL for requests:", apiUrl);
 
+// --- Step 2: Create the Axios Instance ---
 const API = axios.create({
-  baseURL: apiUrl, 
+  baseURL: apiUrl,
 });
 
+// --- Step 3: Attach the Interceptor to the Created Instance ---
 API.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
+    // console.log("[Interceptor] Running for request to:", config.url);
     if (token) {
-      config.headers = config.headers || {}; 
+      config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
+      // console.log("[Interceptor] Token found, Authorization header set.");
     } else {
-      console.log("[Interceptor] No token found in localStorage.");
+      // console.log("[Interceptor] No token found in localStorage.");
     }
-    return config; 
+    return config;
   },
   (error) => {
     console.error("[Interceptor] Request Error:", error);
@@ -38,13 +41,18 @@ API.interceptors.request.use(
   }
 );
 
-export const login = (formData) => API.post("/auth/login", formData); 
-export const register = (formData) => API.post("/auth/register", formData); 
+// --- Step 4: Define and Export API Functions ---
+// ***** INCLUDE '/api' PREFIX HERE *****
+export const login = (formData) => API.post("/api/auth/login", formData); // Changed
+export const register = (formData) => API.post("/api/auth/register", formData); // Changed
 
-export const fetchTasks = () => API.get("/tasks"); 
-export const createTask = (newTask) => API.post("/tasks", newTask);
+// Task API calls
+// ***** INCLUDE '/api' PREFIX HERE *****
+export const fetchTasks = () => API.get("/api/tasks"); // Changed
+export const createTask = (newTask) => API.post("/api/tasks", newTask); // Changed
 export const updateTask = (id, updatedTask) =>
-  API.put(`/tasks/${id}`, updatedTask);
-export const deleteTask = (id) => API.delete(`/tasks/${id}`);
+  API.put(`/api/tasks/${id}`, updatedTask); // Changed
+export const deleteTask = (id) => API.delete(`/api/tasks/${id}`); // Changed
 
+// --- Step 5: Export the configured instance ---
 export default API;
