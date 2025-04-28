@@ -21,9 +21,8 @@ This repository contains the frontend client for the MERN Task Management applic
 *   **Routing:** React Router DOM v6
 *   **State Management:** React Context API (for Authentication), `useState`/`useEffect` (for component-level state like tasks)
 *   **API Communication:** Axios (with interceptors for JWT handling)
-*   **Styling:** CSS3 (or specify if you used CSS Modules, Tailwind CSS, Styled Components, etc.)
-*   (Optional: Add any other significant libraries like `date-fns`, `react-beautiful-dnd`, etc.)
-
+*   **Styling:** CSS3
+  
 ## Architecture & Technical Choices
 
 *   **Framework (React):** Chosen for its component-based architecture, declarative UI approach, strong community support, and efficient rendering using the Virtual DOM. Functional components with Hooks (`useState`, `useEffect`, `useContext`, `useCallback`) were primarily used for state management and side effects, aligning with modern React practices.
